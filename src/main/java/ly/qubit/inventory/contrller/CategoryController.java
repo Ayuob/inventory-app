@@ -2,7 +2,9 @@ package ly.qubit.inventory.contrller;
 
 import jdk.jfr.Category;
 import ly.qubit.inventory.model.Categories;
+import ly.qubit.inventory.model.Products;
 import ly.qubit.inventory.repository.CategoriesRepository;
+import ly.qubit.inventory.repository.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,13 +15,15 @@ public class CategoryController {
 
 
     CategoriesRepository categoriesRepository;
+    ProductsRepository productsRepository;
 
     public CategoryController() {
     }
 
     @Autowired
-    public CategoryController(CategoriesRepository categoriesRepository) {
+    public CategoryController(CategoriesRepository categoriesRepository, ProductsRepository productsRepository) {
         this.categoriesRepository = categoriesRepository;
+        this.productsRepository = productsRepository;
     }
 
     // GET /api/categories: Retrieves a list of all categories.
@@ -52,6 +56,14 @@ public class CategoryController {
     @DeleteMapping("/api/categories/{id}")
     public void deleteCategoryById(@PathVariable int id) {
         categoriesRepository.deleteById(id);
+    }
+    //GET /api/categories/{id}/products: Retrieves a list of all products in a specific category.
+    /*
+    * you could also have an endpoint like GET /api/products?category={id} to retrieve all products in a specific category. This design is less intuitive because the relationship between products and categories is less obvious, but it may be more flexible if products can belong to more than one category.
+    * */
+    @GetMapping("/api/categories/{id}/products")
+    public List<Products> getProductsByCategoryId(@PathVariable int id) {
+        return productsRepository.findByCategory_CategoryId(id);
     }
 
 }

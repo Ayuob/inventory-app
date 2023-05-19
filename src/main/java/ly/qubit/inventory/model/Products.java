@@ -1,5 +1,6 @@
 package ly.qubit.inventory.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -21,8 +22,9 @@ public class Products {
     @Column(name = "price", nullable = false, precision = 2)
     private BigDecimal price;
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
-    private Categories categoriesByCategoryId;
+    private Categories category;
 
     public String getSku() {
         return sku;
@@ -61,19 +63,19 @@ public class Products {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Products products = (Products) o;
-        return Objects.equals(sku, products.sku) && Objects.equals(productName, products.productName) && Objects.equals(categoriesByCategoryId, products.categoriesByCategoryId) && Objects.equals(size, products.size) && Objects.equals(price, products.price);
+        return Objects.equals(sku, products.sku) && Objects.equals(productName, products.productName) && Objects.equals(category, products.category) && Objects.equals(size, products.size) && Objects.equals(price, products.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sku, productName, categoriesByCategoryId, size, price);
+        return Objects.hash(sku, productName, category, size, price);
     }
 
-    public Categories getCategoriesByCategoryId() {
-        return categoriesByCategoryId;
+    public Categories getCategory() {
+        return category;
     }
 
-    public void setCategoriesByCategoryId(Categories categoriesByCategoryId) {
-        this.categoriesByCategoryId = categoriesByCategoryId;
+    public void setCategory(Categories category) {
+        this.category = category;
     }
 }

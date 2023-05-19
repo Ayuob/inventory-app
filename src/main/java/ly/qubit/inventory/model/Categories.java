@@ -1,5 +1,6 @@
 package ly.qubit.inventory.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -17,7 +18,8 @@ public class Categories {
     @Basic
     @Column(name = "product_line", nullable = true, length = 25)
     private String productLine;
-    @OneToMany(mappedBy = "categoriesByCategoryId")
+    @OneToMany(mappedBy = "category")
+    @JsonManagedReference
     private Collection<Products> productsByCategoryId;
 
     public Integer getCategoryId() {
