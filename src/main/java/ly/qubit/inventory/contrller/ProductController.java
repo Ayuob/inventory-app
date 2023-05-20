@@ -1,6 +1,7 @@
 package ly.qubit.inventory.contrller;
 
 import ly.qubit.inventory.model.Product;
+import ly.qubit.inventory.model.ProductDto;
 import ly.qubit.inventory.repository.ProductRepository;
 import ly.qubit.inventory.services.ProductService;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +49,22 @@ public class ProductController {
          }
 
     //PUT /api/products/{sku}: Updates a specific product by SKU. The updated product data should be included in the request body.
+    @PutMapping("/api/products")
+    public ResponseEntity<?> updateProduct(@RequestBody ProductDto product) {
+
+        if(product.sku() == null) {
+            return ResponseEntity.badRequest().body("SKU is required");
+        }
+        try{
+          ProductDto updatedProduct =   productService.update(product);
+            return ResponseEntity.created(URI.create("/api/products/"+updatedProduct.sku())).body(updatedProduct);
+        }catch (RuntimeException e){
+            log.error("Error updating product", e);
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+
+    }
+
     //DELETE /api/products/{sku}: Deletes a specific product by SKU.
 
 

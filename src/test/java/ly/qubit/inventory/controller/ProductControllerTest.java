@@ -2,6 +2,7 @@ package ly.qubit.inventory.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ly.qubit.inventory.model.Product;
+import ly.qubit.inventory.model.ProductDto;
 import ly.qubit.inventory.services.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -80,5 +83,39 @@ public class ProductControllerTest {
                         .content(productJson))
                 .andExpect(status().isConflict());
 
+    }
+
+    @Test
+    public void shouldNOtUpdateProductWithoutSkuTest() throws Exception {
+        ProductDto productWithNullSku = new ProductDto(null, "New Product", 128, BigDecimal.valueOf(24.99), 1);
+
+
+        when(productService.update(any())).thenReturn(productWithNullSku);
+
+
+        when(productService.update(any())).thenReturn(productWithNullSku);
+
+        String productJson = objectMapper.writeValueAsString(productWithNullSku);
+
+        mockMvc.perform(put("/api/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(productJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void shouldUpdateProductTest() throws Exception {
+        ProductDto product = new ProductDto("NP128", "New Product", 128, BigDecimal.valueOf(24.99), 1);
+
+
+        when(productService.update(any())).thenReturn(product);
+
+        String productJson = objectMapper.writeValueAsString(product);
+
+        mockMvc.perform(put("/api/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(productJson))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.sku").value("NP128"));
     }
 }
