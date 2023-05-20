@@ -13,6 +13,6 @@ services:
       - POSTGRES_PASSWORD=inventory
       - POSTGRES_DB=inventory_db
     volumes:
-      - D:\Qubit\Graduation PR\Inventory\code\inventory\src\main\resources\Script\schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./src/main/resources/Script/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     ports:
       - "5438:5432"
