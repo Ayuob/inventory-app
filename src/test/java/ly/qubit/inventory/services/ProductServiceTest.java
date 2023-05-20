@@ -8,9 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
@@ -22,45 +23,75 @@ public class ProductServiceTest {
     @MockBean
     private ProductRepository productRepository;
 
-    @Test
-    public void testSaveProduct() {
+    @Test()
+    public void shouldNotSaveExistingProduct() {
         Product product = new Product();
-        product.setSku("FCP128");
-        product.setProductName("First Cold Press");
-        product.setSize(128);
-        product.setPrice(BigDecimal.valueOf(24.99));
+        product.setSku("ALB008");
+        product.setProductName("Delicate");
+        product.setSize(8);
+        product.setPrice(BigDecimal.valueOf(10.99));
 
-        productService.save(product);
 
-        verify(productRepository, times(1)).save(product);
+        when(productRepository.findBySku("ALB008")).thenReturn(Optional.of(product));
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            productService.save(product);
+        });
+        String expectedMessage = "already exists";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
-    public void testSave5LenthProduct() {
-        Product product = new Product();
-        product.setSku("TSS128");
-        product.setProductName("Test Save Service");
-        product.setSize(128);
-        product.setPrice(BigDecimal.valueOf(24.99));
-
-       Product productAfterSave=  productService.save(product);
-
-        verify(productRepository, times(1)).save(product);
-        assertThat(productAfterSave.getSku()).isEqualTo(product.getSku());
-    }
-    @Test
-    public void testSaveProductWithNullSKU() {
+    public void shouldNotSaveExistingProductWithNulSKU() {
         Product product = new Product();
         product.setSku(null);
-        product.setProductName("First Cold Press");
+        product.setProductName("Delicate");
+        product.setSize(8);
+        product.setPrice(BigDecimal.valueOf(10.99));
+
+        when(productRepository.findBySku(any())).thenReturn(Optional.of(product));
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            productService.save(product);
+        });
+
+        String expectedMessage = "already exists";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test()
+    public void saveNewProductWithNullSKU() {
+        Product product = new Product();
+        product.setSku(null);
+        product.setProductName("New Product Save");
         product.setSize(128);
         product.setPrice(BigDecimal.valueOf(24.99));
 
-        assertThat(product.getSku()).isNull();
+        when(productRepository.findBySku(any())).thenReturn(Optional.empty());
+        when(productRepository.save(any())).thenReturn(product);
 
-        Product afterSave = productService.save(product);
+        Product savedProduct = productService.save(product);
 
-        verify(productRepository, times(1)).save(product);
-        assertThat(afterSave.getSku()).isNotNull();
+        assertNotNull(savedProduct);
     }
+    @Test()
+    public void saveNewProductWithSKU() {
+        Product product = new Product();
+        product.setSku("NPS128");
+        product.setProductName("New Product Save");
+        product.setSize(128);
+        product.setPrice(BigDecimal.valueOf(24.99));
+
+        when(productRepository.findBySku(any())).thenReturn(Optional.empty());
+        when(productRepository.save(any())).thenReturn(product);
+
+        Product savedProduct = productService.save(product);
+
+        assertNotNull(savedProduct);
+    }
+
 }

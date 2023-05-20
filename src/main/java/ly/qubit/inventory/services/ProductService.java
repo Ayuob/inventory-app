@@ -17,9 +17,12 @@ public class ProductService {
     }
 
     public Product save(Product product) {
-        if(product.getSku() == null || product.getSku().isEmpty()){
+        if(product.getSku() == null || product.getSku().isEmpty()) {
             String sku= SKUGenerator.generateSKU(product.getProductName(), product.getSize());
             product.setSku(sku);
+        }
+        if (productRepository.findBySku(product.getSku()).isPresent()) {
+            throw new RuntimeException("Product with SKU " + product.getSku() + " already exists");
         }
 
         return productRepository.save(product);

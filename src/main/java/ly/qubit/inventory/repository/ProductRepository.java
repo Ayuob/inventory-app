@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ProductRepository extends JpaRepository<Product, String> {
@@ -21,6 +22,6 @@ public interface ProductRepository extends JpaRepository<Product, String> {
      int updatePriceAndProductNameAndSizeAndCategoryBySkuIgnoreCase(BigDecimal price, String productName, Integer size, Categories category, @NonNull String sku);
      List<Product> findByCategory_CategoryId(Integer categoriesByCategoryId);
 
-     List<Product> findBySku(String sku);
+     Optional<Product> findBySku(String sku);
 
 }
