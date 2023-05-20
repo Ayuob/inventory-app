@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
+@Table(name = "orders", schema = "sales", catalog = "inventory_db")
 public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

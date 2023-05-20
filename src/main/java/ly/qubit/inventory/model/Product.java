@@ -1,30 +1,38 @@
 package ly.qubit.inventory.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
-public class Products {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Table(name = "products", schema = "inventory", catalog = "inventory_db")
+public class Product {
     @Id
     @Column(name = "sku", nullable = false, length = 7)
+    @JsonProperty("sku")
     private String sku;
     @Basic
     @Column(name = "product_name", nullable = false, length = 50)
+    @JsonProperty("product_name")
     private String productName;
+
     @Basic
     @Column(name = "size", nullable = true)
+    @JsonProperty("size")
     private Integer size;
     @Basic
     @Column(name = "price", nullable = false, precision = 2)
+    @JsonProperty("price")
     private BigDecimal price;
     @ManyToOne
     @JsonBackReference
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Categories category;
+
 
     public String getSku() {
         return sku;
@@ -62,8 +70,8 @@ public class Products {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Products products = (Products) o;
-        return Objects.equals(sku, products.sku) && Objects.equals(productName, products.productName) && Objects.equals(category, products.category) && Objects.equals(size, products.size) && Objects.equals(price, products.price);
+        Product product = (Product) o;
+        return Objects.equals(sku, product.sku) && Objects.equals(productName, product.productName) && Objects.equals(category, product.category) && Objects.equals(size, product.size) && Objects.equals(price, product.price);
     }
 
     @Override

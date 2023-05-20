@@ -20,7 +20,7 @@ public class Categories {
     private String productLine;
     @OneToMany(mappedBy = "category")
     @JsonManagedReference
-    private Collection<Products> productsByCategoryId;
+    private Collection<Product> productByCategoryId;
 
     public Integer getCategoryId() {
         return categoryId;
@@ -59,11 +59,11 @@ public class Categories {
         return Objects.hash(categoryId, categoryDescription, productLine);
     }
 
-    public Collection<Products> getProductsByCategoryId() {
-        return productsByCategoryId;
+    public Collection<Product> getProductsByCategoryId() {
+        return productByCategoryId;
     }
 
-    public void setProductsByCategoryId(Collection<Products> productsByCategoryId) {
-        this.productsByCategoryId = productsByCategoryId;
+    public void setProductsByCategoryId(Collection<Product> productByCategoryId) {
+        this.productByCategoryId = productByCategoryId;
     }
 }
