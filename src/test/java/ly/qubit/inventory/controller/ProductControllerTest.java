@@ -47,4 +47,38 @@ public class ProductControllerTest {
                         .content(productJson))
                 .andExpect(status().isCreated());
     }
+
+    @Test
+    public void shouldNotCreateProduct() throws Exception {
+        Product product = new Product();
+        product.setProductName("New Product");
+        product.setSize(128);
+        product.setPrice(BigDecimal.valueOf(24.99));
+
+        when(productService.save(any())).thenReturn(Optional.empty());
+
+        String productJson = objectMapper.writeValueAsString(product);
+
+        mockMvc.perform(post("/api/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(productJson))
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    public void shouldReturnConflictResponse() throws Exception {
+        Product product = new Product();
+        product.setProductName("New Product");
+        product.setSize(128);
+        product.setPrice(BigDecimal.valueOf(24.99));
+
+        when(productService.save(any())).thenThrow(new RuntimeException("Product already exists"));
+
+        String productJson = objectMapper.writeValueAsString(product);
+
+        mockMvc.perform(post("/api/products")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(productJson))
+                .andExpect(status().isConflict());
+
+    }
 }

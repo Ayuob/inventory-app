@@ -35,11 +35,16 @@ public class ProductController {
 
     //POST /api/products: Creates a new product. The product data should be included in the request body.
     @PostMapping("/api/products")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<?> createProduct(@RequestBody Product product) {
+        try{
+            Optional<Product> createdProduct= productService.save(product);
+            return createdProduct.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
 
-         Optional<Product> createdProduct= productService.save(product);
-        return createdProduct.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
-    }
+        }catch (RuntimeException e){
+            log.error("Error creating product", e);
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+         }
 
     //PUT /api/products/{sku}: Updates a specific product by SKU. The updated product data should be included in the request body.
     //DELETE /api/products/{sku}: Deletes a specific product by SKU.
