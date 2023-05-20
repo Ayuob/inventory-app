@@ -6,6 +6,8 @@ import ly.qubit.inventory.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProductService {
 
@@ -16,7 +18,7 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public Product save(Product product) {
+    public Optional<Product> save(Product product) {
         if(product.getSku() == null || product.getSku().isEmpty()) {
             String sku= SKUGenerator.generateSKU(product.getProductName(), product.getSize());
             product.setSku(sku);
@@ -25,7 +27,7 @@ public class ProductService {
             throw new RuntimeException("Product with SKU " + product.getSku() + " already exists");
         }
 
-        return productRepository.save(product);
+        return Optional.of(productRepository.save(product));
 
     }
 }

@@ -74,9 +74,10 @@ public class ProductServiceTest {
         when(productRepository.findBySku(any())).thenReturn(Optional.empty());
         when(productRepository.save(any())).thenReturn(product);
 
-        Product savedProduct = productService.save(product);
+        Optional<Product> savedProduct = productService.save(product);
 
-        assertNotNull(savedProduct);
+        assertNotNull(savedProduct.get());
+        assertTrue(savedProduct.isPresent());
     }
     @Test()
     public void saveNewProductWithSKU() {
@@ -89,9 +90,10 @@ public class ProductServiceTest {
         when(productRepository.findBySku(any())).thenReturn(Optional.empty());
         when(productRepository.save(any())).thenReturn(product);
 
-        Product savedProduct = productService.save(product);
+        Optional<Product> savedProduct = productService.save(product);
 
-        assertNotNull(savedProduct);
+        assertNotNull(savedProduct.get());
+        assertTrue(savedProduct.isPresent());
     }
 
 }
