@@ -1,4 +1,4 @@
-package ly.qubit.inventory.contrller;
+package ly.qubit.inventory.controller;
 
 import ly.qubit.inventory.model.Categories;
 import ly.qubit.inventory.model.Product;

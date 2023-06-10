@@ -6,5 +6,5 @@ import java.math.BigDecimal;
 /**
  * A DTO for the {@link ly.qubit.inventory.model.Product} entity
  */
-public record ProductDto(String sku, String productName, Integer size, BigDecimal price, Integer categoryCId) implements Serializable {
+public record ProductDTO(String sku, String productName, Integer size, BigDecimal price, Integer categoryCId) implements Serializable {
 }

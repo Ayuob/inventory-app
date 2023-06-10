@@ -1,7 +1,7 @@
-package ly.qubit.inventory.contrller;
+package ly.qubit.inventory.controller;
 
 import ly.qubit.inventory.model.Product;
-import ly.qubit.inventory.model.ProductDto;
+import ly.qubit.inventory.model.ProductDTO;
 import ly.qubit.inventory.repository.ProductRepository;
 import ly.qubit.inventory.services.ProductService;
 import org.slf4j.Logger;
@@ -50,13 +50,13 @@ public class ProductController {
 
     //PUT /api/products/{sku}: Updates a specific product by SKU. The updated product data should be included in the request body.
     @PutMapping("/api/products")
-    public ResponseEntity<?> updateProduct(@RequestBody ProductDto product) {
+    public ResponseEntity<?> updateProduct(@RequestBody ProductDTO product) {
 
         if(product.sku() == null) {
             return ResponseEntity.badRequest().body("SKU is required");
         }
         try{
-          ProductDto updatedProduct =   productService.update(product);
+          ProductDTO updatedProduct =   productService.update(product);
             return ResponseEntity.created(URI.create("/api/products/"+updatedProduct.sku())).body(updatedProduct);
         }catch (RuntimeException e){
             log.error("Error updating product", e);

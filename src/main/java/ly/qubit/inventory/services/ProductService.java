@@ -1,7 +1,7 @@
 package ly.qubit.inventory.services;
 
 import ly.qubit.inventory.model.Product;
-import ly.qubit.inventory.model.ProductDto;
+import ly.qubit.inventory.model.ProductDTO;
 import ly.qubit.inventory.model.SKUGenerator;
 import ly.qubit.inventory.model.maper.ProductMapper;
 import ly.qubit.inventory.repository.CategoriesRepository;
@@ -37,7 +37,7 @@ public class ProductService {
 
     }
 
-    public ProductDto update(ProductDto product) {
+    public ProductDTO update(ProductDTO product) {
         if(product.sku() == null) {
             throw new RuntimeException("SKU is required");
         }
