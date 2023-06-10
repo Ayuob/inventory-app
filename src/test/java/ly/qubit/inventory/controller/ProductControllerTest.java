@@ -2,7 +2,7 @@ package ly.qubit.inventory.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ly.qubit.inventory.model.Product;
-import ly.qubit.inventory.model.ProductDto;
+import ly.qubit.inventory.model.ProductDTO;
 import ly.qubit.inventory.services.ProductService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +87,7 @@ public class ProductControllerTest {
 
     @Test
     public void shouldNOtUpdateProductWithoutSkuTest() throws Exception {
-        ProductDto productWithNullSku = new ProductDto(null, "New Product", 128, BigDecimal.valueOf(24.99), 1);
+        ProductDTO productWithNullSku = new ProductDTO(null, "New Product", 128, BigDecimal.valueOf(24.99), 1);
 
 
         when(productService.update(any())).thenReturn(productWithNullSku);
@@ -105,7 +105,7 @@ public class ProductControllerTest {
 
     @Test
     public void shouldUpdateProductTest() throws Exception {
-        ProductDto product = new ProductDto("NP128", "New Product", 128, BigDecimal.valueOf(24.99), 1);
+        ProductDTO product = new ProductDTO("NP128", "New Product", 128, BigDecimal.valueOf(24.99), 1);
 
 
         when(productService.update(any())).thenReturn(product);

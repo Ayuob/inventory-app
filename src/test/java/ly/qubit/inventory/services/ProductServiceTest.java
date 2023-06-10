@@ -96,4 +96,6 @@ public class ProductServiceTest {
         assertTrue(savedProduct.isPresent());
     }
 
+    /* TODO:  test Update method with valid SKU and Category id */
+
 }
