@@ -37,7 +37,7 @@ public class PurchaseOrder {
     private BigDecimal totalAmount;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL , orphanRemoval = true)
     private Set<PurchaseOrderLine> purchaseOrderLines = new LinkedHashSet<>();
 
 }
